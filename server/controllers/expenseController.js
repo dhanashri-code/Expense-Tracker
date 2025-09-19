@@ -40,6 +40,7 @@ exports.addExpense = async (req, res) => {
     await newExpense.save();
     res.status(201).json(newExpense);
   } catch (error) {
+    console.log("not add expense - ",newExpense);
     res.status(500).json({ message: 'Failed to add expense', error });
   }
 };
