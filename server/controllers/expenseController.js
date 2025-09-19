@@ -36,7 +36,7 @@ exports.addExpense = async (req, res) => {
           ? totalInstallments || 0
           : 0,
     });
-
+    console.log("add expense - ",newExpense);
     await newExpense.save();
     res.status(201).json(newExpense);
   } catch (error) {
