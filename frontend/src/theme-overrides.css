@@ -1,0 +1,25 @@
+/* Fix AntD Select, DatePicker, and Input brightness in dark mode */
+.ant-select-selector,
+.ant-picker,
+.ant-input,
+.ant-input-number {
+  background-color: #1f1f1f !important;
+  color: #ffffff !important;
+  border-color: #434343 !important;
+}
+
+.ant-select-dropdown,
+.ant-picker-dropdown {
+  background-color: #141414 !important;
+  color: #fff !important;
+}
+
+.ant-select-item-option,
+.ant-picker-cell-inner,
+.ant-picker-time-panel-cell-inner {
+  color: #fff !important;
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background-color: #303030 !important;
+}

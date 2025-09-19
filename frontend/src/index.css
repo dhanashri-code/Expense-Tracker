@@ -1,0 +1,25 @@
+body {
+  background-color: #141414;
+  color: #f0f0f0;
+  /* globally brighten text */
+}
+
+.ant-typography,
+.ant-list-item-meta-description,
+.ant-list-item-meta-title {
+  color: #f0f0f0 !important;
+}
+
+.ant-select-selector,
+.ant-picker-input input,
+.ant-input,
+.ant-input-number-input {
+  color: #fff !important;
+  background-color: #1f1f1f !important;
+}
+
+.ant-select-selection-placeholder,
+.ant-picker-placeholder,
+.ant-input::placeholder {
+  color: #888 !important;
+}
