@@ -265,7 +265,26 @@ export default function Dashboard() {
             </ResponsiveContainer>
           </Card>
         </Col>
+
+<Col xs={24} lg={12}>
+  <Card title="Payable Bills by Business Name">
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart 
+        data={insights.payableData} 
+        layout="vertical" // horizontal chart
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis type="number" />
+        <YAxis dataKey="name" type="category" width={150} />
+        <ReTooltip />
+        <Bar dataKey="amount" fill="#ff4d4f" />
+      </BarChart>
+    </ResponsiveContainer>
+  </Card>
+</Col>
+                
       </Row>
+      
 
       {/* === AI Insights Section === */}
       {/* === AI Insights Section === */}
