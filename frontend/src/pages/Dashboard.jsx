@@ -3,8 +3,19 @@ import dayjs from 'dayjs';
 import { getExpenseInsights, getAIInsights } from '../services/expenseService';
 import { Card, Row, Col, Typography, Statistic, message, Select, DatePicker, Button } from 'antd';
 import {
-  PieChart, Pie, Cell, Tooltip as ReTooltip,
-  BarChart, Bar, XAxis, YAxis, ResponsiveContainer, CartesianGrid
+  ResponsiveContainer,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip as ReTooltip,
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  Treemap
 } from 'recharts';
 
 const { Title } = Typography;
@@ -46,52 +57,52 @@ export default function Dashboard() {
   // === AI Insights Handler ===
 
   const handleGenerateInsights = async () => {
-  if (!insights) return;
-  setAiLoading(true);
+    if (!insights) return;
+    setAiLoading(true);
 
-  try {
-    let filterLabel = "All Time";
+    try {
+      let filterLabel = "All Time";
 
-    // If user selected a custom date range
-    if (dateRange?.length) {
-      filterLabel = `${dayjs(dateRange[0]).format("DD MMM")} - ${dayjs(dateRange[1]).format("DD MMM YYYY")}`;
-    } else {
-      // Compute filter label based on filter type
-      switch (filter) {
-        case "today":
-          filterLabel = "Today";
-          break;
-        case "week":
-          filterLabel = "This Week";
-          break;
-        case "month":
-          filterLabel = "This Month";
-          break;
-        case "year":
-          filterLabel = "This Year";
-          break;
+      // If user selected a custom date range
+      if (dateRange?.length) {
+        filterLabel = `${dayjs(dateRange[0]).format("DD MMM")} - ${dayjs(dateRange[1]).format("DD MMM YYYY")}`;
+      } else {
+        // Compute filter label based on filter type
+        switch (filter) {
+          case "today":
+            filterLabel = "Today";
+            break;
+          case "week":
+            filterLabel = "This Week";
+            break;
+          case "month":
+            filterLabel = "This Month";
+            break;
+          case "year":
+            filterLabel = "This Year";
+            break;
+        }
       }
+
+      const res = await getAIInsights({
+        totalAmount: insights.totalAmount,
+        totalCredit: insights.totalCredit,
+        totalDebit: insights.totalDebit,
+        monthlyData: insights.monthlyData,
+        categoryData: insights.categoryData,
+        paymentData: insights.paymentData,
+        payableData: insights.payableData,
+        filter: filterLabel
+      });
+
+      setAiSummary(res.summary);
+    } catch (err) {
+      console.error("AI Insights error:", err);
+      setAiSummary("⚠️ Could not generate AI insights.");
     }
 
-    const res = await getAIInsights({
-      totalAmount: insights.totalAmount,
-      totalCredit: insights.totalCredit,
-      totalDebit: insights.totalDebit,
-      monthlyData: insights.monthlyData,
-      categoryData: insights.categoryData,
-      paymentData: insights.paymentData,
-      payableData: insights.payableData,
-      filter: filterLabel
-    });
-
-    setAiSummary(res.summary);
-  } catch (err) {
-    console.error("AI Insights error:", err);
-    setAiSummary("⚠️ Could not generate AI insights.");
-  }
-
-  setAiLoading(false);
-};
+    setAiLoading(false);
+  };
 
 
 
@@ -176,115 +187,111 @@ export default function Dashboard() {
 
       {/* Charts */}
       <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
-        {/* Transactions Over Time */}
+        {/* Transactions Over Time (Line Chart) */}
         <Col xs={24} lg={24}>
           <Card title="Transactions Over Time">
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="label"
-                  interval={0}
-                  angle={-30}
-                  textAnchor="end"
-                  height={filter === 'day' ? 60 : 50}
-                />
-                <YAxis />
-                <ReTooltip />
-                <Bar dataKey="amount" fill="#3a9152" />
-              </BarChart>
-            </ResponsiveContainer>
+            <div style={{ overflowX: 'auto' }}>
+              <div style={{ minWidth: 700 }}> {/* Chart won't shrink too much */}
+
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="label"
+                      interval={0}
+                      angle={-30}
+                      textAnchor="end"
+                      height={filter === 'day' ? 60 : 50}
+                    />
+                    <YAxis />
+                    <ReTooltip />
+                    <Line type="monotone" dataKey="amount" stroke="#3a9152" strokeWidth={2} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </Card>
         </Col>
 
-        {/* Payment Type Distribution */}
+        {/* Payment Type Distribution (Donut Chart) */}
         <Col xs={24} lg={12}>
           <Card title="Payment Type Distribution">
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={insights.paymentData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  label
-                >
-                  {insights.paymentData.map((entry, index) => (
-                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <ReTooltip />
-              </PieChart>
-            </ResponsiveContainer>
+            <div style={{ overflowX: 'auto' }}>
+              <div style={{ minWidth: 400 }}>
+
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={insights.paymentData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={100}
+                      label
+                    >
+                      {insights.paymentData.map((entry, index) => (
+                        <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <ReTooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </Card>
         </Col>
 
-        {/* Category Distribution */}
+        {/* Category Distribution (Bar Chart) */}
         <Col xs={24} lg={12}>
           <Card title="Category Distribution">
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={insights.categoryData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  label
-                >
-                  {insights.categoryData.map((entry, index) => (
-                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <ReTooltip />
-              </PieChart>
-            </ResponsiveContainer>
+            <div style={{ overflowX: 'auto' }}>
+              <div style={{ minWidth: 500 }}>
+
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={insights.categoryData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" interval={0} angle={-30} textAnchor="end" height={60} />
+                    <YAxis />
+                    <ReTooltip />
+                    <Bar dataKey="value">
+                      {insights.categoryData.map((entry, index) => (
+                        <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </Card>
         </Col>
 
-        {/* Payable Bills */}
-        <Col xs={24} lg={12}>
+
+        {/* Payable Bills (Horizontal Bar Chart) */}
+        <Col xs={24} lg={24}>
           <Card title="Payable Bills by Title">
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={insights.payableData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="name"
-                  interval={0}
-                  angle={-30}
-                  textAnchor="end"
-                  height={60}
-                />
-                <YAxis />
-                <ReTooltip />
-                <Bar dataKey="amount" fill="#ff4d4f" />
-              </BarChart>
-            </ResponsiveContainer>
+            <div style={{ overflowX: 'auto' }}>
+              <div style={{ minWidth: 600 }}>
+
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart
+                    data={insights.payableData}
+                    layout="vertical"
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis type="number" />
+                    <YAxis dataKey="name" type="category" width={100} />
+                    <ReTooltip />
+                    <Bar dataKey="amount" fill="#ff4d4f" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </Card>
         </Col>
 
-<Col xs={24} lg={12}>
-  <Card title="Payable Bills by Business Name">
-    <ResponsiveContainer width="100%" height={300}>
-      <BarChart 
-        data={insights.payableData} 
-        layout="vertical" // horizontal chart
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis type="number" />
-        <YAxis dataKey="name" type="category" width={150} />
-        <ReTooltip />
-        <Bar dataKey="amount" fill="#ff4d4f" />
-      </BarChart>
-    </ResponsiveContainer>
-  </Card>
-</Col>
-                
       </Row>
-      
 
       {/* === AI Insights Section === */}
       {/* === AI Insights Section === */}
@@ -326,5 +333,4 @@ export default function Dashboard() {
     </div>
   );
 }
-
 
