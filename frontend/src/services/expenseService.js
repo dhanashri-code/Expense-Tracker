@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = 'https://expense-tracker-1-pjm7.onrender.com';
+const API = 'https://expense-tracker-1-pjm7.onrender.com/api';
 
 export const getExpenses = () => axios.get(`${API}/expenses`);
 export const getExpenseById = (id) => axios.get(`${API}/expenses/${id}`);
