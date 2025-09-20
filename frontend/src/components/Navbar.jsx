@@ -54,20 +54,22 @@ const Navbar = () => {
     >
       {/* Logo with scroll animation */}
       <div
-        style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-        onClick={() => navigate('/')}
-      >
-        <img
-          src="/Logo.jpg" // Put logo in public folder as /public/logo.png
-          alt="Logo"
-          style={{
-            height: scrolled ? '52px' : '68px',
-            width: 'auto',
-            marginRight: '2px',
-            transition: 'height 0.3s ease',
-          }}
-        />
-      </div>
+  style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+  onClick={() => navigate('/')}
+>
+  <img
+    src="/logo.png" // Place your image inside the /public folder and rename it for clarity
+    alt="Expense Tracker Logo"
+    style={{
+      height: scrolled ? '52px' : '68px', // Keeps responsive height
+      width: 'auto',                      // Maintains aspect ratio
+      marginRight: '8px',
+      transition: 'height 0.3s ease',
+      objectFit: 'contain',               // Prevents stretching/cropping
+      imageRendering: 'crisp-edges',      // Keeps logo sharp
+    }}
+  />
+</div>
 
       {/* Desktop Menu */}
       <div className="desktop-menu" style={{ display: 'none', flex: 1, marginLeft: 20 }}>
