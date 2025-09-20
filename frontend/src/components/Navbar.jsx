@@ -58,7 +58,7 @@ const Navbar = () => {
   onClick={() => navigate('/')}
 >
   <img
-    src="/logo.png" // Place your image inside the /public folder and rename it for clarity
+    src="/Logo.png" // Place your image inside the /public folder and rename it for clarity
     alt="Expense Tracker Logo"
     style={{
       height: scrolled ? '52px' : '68px', // Keeps responsive height
