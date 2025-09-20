@@ -58,12 +58,12 @@ const Navbar = () => {
         onClick={() => navigate('/')}
       >
         <img
-          src="/featured.png" // Put logo in public folder as /public/logo.png
+          src="/Logo.jpg" // Put logo in public folder as /public/logo.png
           alt="Logo"
           style={{
-            height: scrolled ? '32px' : '48px',
+            height: scrolled ? '42px' : '48px',
             width: 'auto',
-            marginRight: '10px',
+            marginRight: '2px',
             transition: 'height 0.3s ease',
           }}
         />
