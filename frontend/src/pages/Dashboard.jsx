@@ -145,7 +145,7 @@ export default function Dashboard() {
   });
 
   return (
-    <div style={{ padding: 24 }}>
+    <div style={{ padding: 5 }}>
       {/* Header with Filters */}
       <Row justify="space-between" align="middle" style={{ marginBottom: 20, gap: 16, flexWrap: "wrap" }}>
         <Title level={2} style={{ color: '#00ffe1', margin: 0 }}>Dashboard Overview</Title>
