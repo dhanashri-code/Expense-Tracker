@@ -61,7 +61,7 @@ const Navbar = () => {
           src="/Logo.jpg" // Put logo in public folder as /public/logo.png
           alt="Logo"
           style={{
-            height: scrolled ? '42px' : '48px',
+            height: scrolled ? '52px' : '68px',
             width: 'auto',
             marginRight: '2px',
             transition: 'height 0.3s ease',
